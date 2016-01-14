@@ -9,8 +9,8 @@ var application_root = __dirname,
 var app = express();
 
 //Where to serve static content
-//app.use( express.static( path.join( application_root, 'site') ) );
-//app.use(bodyParser());
+app.use( express.static( path.join( application_root, 'site') ) );
+app.use(bodyParser());
 
 //Start server
 var port = 4711;
@@ -30,41 +30,41 @@ app.get( '/api', function( request, response ) {
 mongoose.connect( 'mongodb://localhost/library_database' );
 
 //Schemas
-var Keywords = new mongoose.Schema({
-    keyword: String
-});
-
-//Schemas
 var Book = new mongoose.Schema({
     title: String,
     author: String,
     releaseDate: Date,
-    keywords: [ Keywords ] 
+    keywords: [Keywords] 
+});
+
+//Schemas
+var Keywords = new mongoose.Schema({
+    keyword: String
 });
 
 //Models
 var BookModel = mongoose.model( 'Book', Book );
 
 // Configure server
-app.configure( function() {
-    app.use( express.static( path.join( application_root, 'site') ) );
-    app.use(bodyParser());
-    
-    //parses request body and populates request.body
-    //app.use( express.bodyParser() );
-
-    //checks request.body for HTTP method overrides
-    app.use( express.methodOverride() );
-
-    //perform route lookup based on url and HTTP method
-    app.use( app.router );
-
-    //Where to serve static content
-    app.use( express.static( path.join( application_root, 'site') ) );
-
-    //Show all errors in development
-    app.use( express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
+//app.configure( function() {
+//    app.use( express.static( path.join( application_root, 'site') ) );
+//    app.use(bodyParser());
+//    
+//    //parses request body and populates request.body
+//    //app.use( express.bodyParser() );
+//
+//    //checks request.body for HTTP method overrides
+//    app.use( express.methodOverride() );
+//
+//    //perform route lookup based on url and HTTP method
+//    app.use( app.router );
+//
+//    //Where to serve static content
+//    app.use( express.static( path.join( application_root, 'site') ) );
+//
+//    //Show all errors in development
+//    app.use( express.errorHandler({ dumpExceptions: true, showStack: true }));
+//});
 
 //Get a list of all books
 app.get( '/api/books', function( request, response ) {
